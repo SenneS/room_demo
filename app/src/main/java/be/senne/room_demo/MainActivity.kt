@@ -10,11 +10,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.Room
 import be.senne.room_demo.ui.theme.Room_demoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val entity = Entity(null, "Een interessante titel", "Een goede beschrijving")
+
+        val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").build()
+
         setContent {
             Room_demoTheme {
                 // A surface container using the 'background' color from the theme
