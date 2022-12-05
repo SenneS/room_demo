@@ -6,20 +6,21 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.Deferred
 
 @Dao
 interface EntityDAO {
     @Query("SELECT * FROM entity")
-    fun getAll() : List<Entity>
+    suspend fun getAll() : List<Entity>
 
     @Query("SELECT * FROM entity WHERE id = :id")
-    fun getById(id : Int) : Entity
+    suspend fun getById(id : Int) : Entity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(entity: Entity)
+    suspend fun insert(entity: Entity)
 
     @Delete()
-    fun delete(entity: Entity)
+    suspend fun delete(entity: Entity)
     @Update()
-    fun update(entity: Entity)
+    suspend fun update(entity: Entity)
 }

@@ -13,6 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
 import be.senne.room_demo.ui.theme.Room_demoTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,18 +24,19 @@ class MainActivity : ComponentActivity() {
 
         val entity = Entity(null, "Een interessante titel", "Een goede beschrijving")
 
-        val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").allowMainThreadQueries().build()
+        val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").build()
         val entityDAO = db.entityDAO()
-        val entities = entityDAO.getAll()
 
-        if(entities.isEmpty()) {
-            entityDAO.insert(entity)
-            Toast.makeText(applicationContext, "Entity is aan database toegevoegd.", Toast.LENGTH_SHORT).show()
+        CoroutineScope(Dispatchers.Main).launch {
+            val entities = entityDAO.getAll()
+            if(entities.isEmpty()) {
+                entityDAO.insert(entity)
+                Toast.makeText(applicationContext, "Entity is aan database toegevoegd.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(applicationContext, "Entity is al in database (${entities[0].description})", Toast.LENGTH_SHORT).show()
+            }
         }
-        else {
-            Toast.makeText(applicationContext, "Entity is al in database (${entities[0].description})", Toast.LENGTH_SHORT).show()
-        }
-
 
         setContent {
             Room_demoTheme {
