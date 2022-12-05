@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
         val entity = Entity(null, "Een interessante titel", "Een goede beschrijving")
 
-        val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").build()
+        val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").allowMainThreadQueries().build()
         val entityDAO = db.entityDAO()
         val entities = entityDAO.getAll()
 
