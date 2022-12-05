@@ -1,6 +1,7 @@
 package be.senne.room_demo
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,17 @@ class MainActivity : ComponentActivity() {
         val entity = Entity(null, "Een interessante titel", "Een goede beschrijving")
 
         val db = Room.databaseBuilder(applicationContext, RoomDatabase::class.java, "mijn-database").build()
+        val entityDAO = db.entityDAO()
+        val entities = entityDAO.getAll()
+
+        if(entities.isEmpty()) {
+            entityDAO.insert(entity)
+            Toast.makeText(applicationContext, "Entity is aan database toegevoegd.", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            Toast.makeText(applicationContext, "Entity is al in database (${entities[0].description})", Toast.LENGTH_SHORT).show()
+        }
+
 
         setContent {
             Room_demoTheme {
